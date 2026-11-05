@@ -74,6 +74,9 @@ class PyViCare:
         "heating", "zigbee", "vitoconnect", "electricityStorage",
         "tcu", "ventilation", "roomControl", "systemController",
         "outdoorUnit",
+        # Vitoset Aqua water treatment station. Unlike the types above the API
+        # reports this one capitalized.
+        "WaterSoftener",
     ]
 
     def __extract_all_devices(self):

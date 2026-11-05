@@ -39,6 +39,14 @@ class WaterTreatment(Device):
     def getTotalConsumption(self) -> int:
         return int(self.getProperty("water.consumption.summary")["properties"]["total"]["value"])
 
+    @handleNotSupported
+    def getConsumptionCurrentDay(self) -> int:
+        return int(self.getProperty("water.consumption.summary")["properties"]["currentDay"]["value"])
+
+    @handleNotSupported
+    def getConsumptionLastSevenDays(self) -> int:
+        return int(self.getProperty("water.consumption.summary")["properties"]["lastSevenDays"]["value"])
+
     # --- Leak Detection ---
 
     @property

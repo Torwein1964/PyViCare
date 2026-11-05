@@ -396,6 +396,193 @@ class HeatingDevice(Device):
     def getBoilerTemperature(self):
         return self.getProperty("heating.boiler.sensors.temperature.main")["properties"]["value"]["value"]
 
+    @handleNotSupported
+    def getBoilerTemperatureCurrent(self):
+        return self.getProperty("heating.boiler.temperature.current")["properties"]["value"]["value"]
+
+    # ------------------------------------------------------- heating water buffer
+    @handleNotSupported
+    def getBufferChargingLevelBottom(self) -> float:
+        """Charging level of the heating water buffer at the bottom, in percent."""
+        return float(self.getProperty("heating.buffer.charging.level.bottom")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getBufferChargingLevelMiddle(self) -> float:
+        """Charging level of the heating water buffer in the middle, in percent."""
+        return float(self.getProperty("heating.buffer.charging.level.middle")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getBufferChargingLevelTop(self) -> float:
+        """Charging level of the heating water buffer at the top, in percent."""
+        return float(self.getProperty("heating.buffer.charging.level.top")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getBufferChargingLevelTotal(self) -> float:
+        """Total charging level of the heating water buffer, in percent."""
+        return float(self.getProperty("heating.buffer.charging.level.total")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getBufferHysteresisUnitLegacy(self) -> str:
+        """Unit of the buffer hysteresis from the deprecated `heating.buffer.hysteresis`.
+
+        Deprecated by Viessmann (removal date 2024-09-15) in favour of
+        `heating.bufferCylinder.hysteresis`. The feature carries no commands,
+        so the hysteresis can only be read, not set.
+        """
+        return str(self.getProperty("heating.buffer.hysteresis")["properties"]["switchOnValue"]["unit"])
+
+    @handleNotSupported
+    def getBufferHysteresisSwitchOnLegacy(self) -> float:
+        """Buffer hysteresis switch-on value from the deprecated `heating.buffer.hysteresis`.
+
+        See getBufferHysteresisUnitLegacy for the deprecation details.
+        """
+        return float(self.getProperty("heating.buffer.hysteresis")["properties"]["switchOnValue"]["value"])
+
+    @handleNotSupported
+    def getBufferHysteresisSwitchOffLegacy(self) -> float:
+        """Buffer hysteresis switch-off value from the deprecated `heating.buffer.hysteresis`.
+
+        See getBufferHysteresisUnitLegacy for the deprecation details.
+        """
+        return float(self.getProperty("heating.buffer.hysteresis")["properties"]["switchOffValue"]["value"])
+
+    @handleNotSupported
+    def getBufferMainTemperatureLegacy(self) -> float:
+        """Buffer temperature from the deprecated `heating.buffer.sensors.temperature.main`.
+
+        Deprecated by Viessmann (removal date 2024-09-15) in favour of
+        `heating.bufferCylinder.sensors.temperature.main`, which
+        HeatPump.getBufferMainTemperature reads. Firmware that still serves
+        the old feature usually serves both; prefer the bufferCylinder one.
+        """
+        return float(self.getProperty("heating.buffer.sensors.temperature.main")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getBufferCylinderSize(self) -> float:
+        """Configured size of the heating water buffer cylinder, in litres.
+
+        `heating.configuration.bufferCylinderSize` is a commissioning
+        parameter, not a measurement. A value of 0 means no buffer cylinder is
+        configured - which is why such an installation serves neither the layer
+        temperatures of `heating.bufferCylinder.sensors.temperature.*` nor the
+        charging levels of `heating.buffer.charging.level.*`.
+        """
+        return float(self.getProperty("heating.configuration.bufferCylinderSize")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getDomesticHotWaterScaldProtectionActive(self) -> bool:
+        return bool(self.getProperty("heating.dhw.scaldProtection")["properties"]["active"]["value"])
+
+    # --------------------------------------------- dhw hygiene (anti-legionella)
+    @handleNotSupported
+    def getDomesticHotWaterHygieneEnabled(self) -> bool:
+        return bool(self.getProperty("heating.dhw.hygiene")["properties"]["enabled"]["value"])
+
+    @handleNotSupported
+    def getDomesticHotWaterHygieneActive(self) -> bool:
+        """Whether the hygiene heat-up is running right now.
+
+        Served only by devices that have the function enabled: one with it
+        switched off carries `enabled` alone, and this raises
+        PyViCareNotSupportedFeatureError there.
+        """
+        return bool(self.getProperty("heating.dhw.hygiene")["properties"]["active"]["value"])
+
+    @handleAPICommandErrors
+    def setDomesticHotWaterHygieneEnabled(self, enabled: bool) -> Any:
+        """Enable or disable the hygiene function.
+
+        Two generations of commands sit on the same feature: the newer
+        `setEnabled` takes the flag as a parameter, the older `enable`/`disable`
+        pair carries it in the command name and is marked deprecated on devices
+        that serve both. The newer one is preferred, the pair is the fallback.
+
+        Which of the two the device accepts also depends on its state - while
+        the function is off only `enable` is executable, and the other way
+        round - so a refused command surfaces as PyViCareCommandError.
+        """
+        feature = self.getProperty("heating.dhw.hygiene")
+        commands = feature.get("commands") or {}
+        if "setEnabled" in commands:
+            return self.setProperty("heating.dhw.hygiene", "setEnabled", {'enabled': enabled})
+        return self.setProperty("heating.dhw.hygiene", "enable" if enabled else "disable", {})
+
+    @handleNotSupported
+    def getDomesticHotWaterHygieneTriggerStartHour(self) -> int:
+        """Hour at which the hygiene heat-up starts.
+
+        `heating.dhw.hygiene.trigger` carries no properties while the function
+        is disabled, so this raises PyViCareNotSupportedFeatureError there.
+        """
+        return int(self.getProperty("heating.dhw.hygiene.trigger")["properties"]["startHour"]["value"])
+
+    @handleNotSupported
+    def getDomesticHotWaterHygieneTriggerStartMinute(self) -> int:
+        """Minute at which the hygiene heat-up starts."""
+        return int(self.getProperty("heating.dhw.hygiene.trigger")["properties"]["startMinute"]["value"])
+
+    @handleNotSupported
+    def getDomesticHotWaterHygieneTriggerWeekdays(self) -> List[str]:
+        """Weekdays on which the hygiene heat-up runs.
+
+        One entry for a weekly heat-up, all seven for a daily one - the API
+        knows no separate daily flag. Abbreviated as the API reports them,
+        `Mon` to `Sun`.
+        """
+        return list(self.getProperty("heating.dhw.hygiene.trigger")["properties"]["weekdays"]["value"])
+
+    @handleAPICommandErrors
+    def setDomesticHotWaterHygieneTriggerDaily(self, startHour: int, startMinute: int) -> Any:
+        """Run the hygiene heat-up every day at the given time."""
+        return self.setProperty("heating.dhw.hygiene.trigger", "triggerDaily",
+                                {'startHour': startHour, 'startMinute': startMinute})
+
+    @handleAPICommandErrors
+    def setDomesticHotWaterHygieneTriggerOncePerWeek(self, weekday: str, startHour: int, startMinute: int) -> Any:
+        """Run the hygiene heat-up once a week, on `weekday` at the given time.
+
+        `weekday` is the abbreviation the API uses, `Mon` to `Sun`.
+        """
+        return self.setProperty("heating.dhw.hygiene.trigger", "triggerOncePerWeek",
+                                {'weekday': weekday, 'startHour': startHour, 'startMinute': startMinute})
+
+    @handleNotSupported
+    def getDomesticHotWaterOperatingModeActive(self, mode: str) -> bool:
+        """Whether a single dhw operating mode is active.
+
+        `getDomesticHotWaterActiveOperatingMode()` returns the one mode the
+        device reports as active. This tells you the flag of an individual
+        mode, which can carry states the active-mode feature does not expose.
+        Valid modes come from `getDomesticHotWaterOperatingModes()`.
+        """
+        return bool(self.getProperty(f"heating.dhw.operating.modes.{mode}")["properties"]["active"]["value"])
+
+    # Holiday programs are device wide, not per circuit
+    @handleNotSupported
+    def getHolidayProgramActive(self) -> bool:
+        return bool(self.getProperty("heating.operating.programs.holiday")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getHolidayProgramStart(self) -> str:
+        return str(self.getProperty("heating.operating.programs.holiday")["properties"]["start"]["value"])
+
+    @handleNotSupported
+    def getHolidayProgramEnd(self) -> str:
+        return str(self.getProperty("heating.operating.programs.holiday")["properties"]["end"]["value"])
+
+    @handleNotSupported
+    def getHolidayAtHomeProgramActive(self) -> bool:
+        return bool(self.getProperty("heating.operating.programs.holidayAtHome")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getHolidayAtHomeProgramStart(self) -> str:
+        return str(self.getProperty("heating.operating.programs.holidayAtHome")["properties"]["start"]["value"])
+
+    @handleNotSupported
+    def getHolidayAtHomeProgramEnd(self) -> str:
+        return str(self.getProperty("heating.operating.programs.holidayAtHome")["properties"]["end"]["value"])
+
 
 class HeatingDeviceWithComponent:
     """This is the base class for all heating components"""
@@ -746,3 +933,23 @@ class HeatingCircuit(HeatingDeviceWithComponent):
             target_supply = max(min_value, min(target_supply, max_value))
 
         return float(round(target_supply, 1))
+
+    @handleNotSupported
+    def getModeActive(self, mode: str) -> bool:
+        """Whether a single operating mode of this circuit is active.
+
+        `getActiveMode()` reports the one mode the device considers active, but
+        on E3 devices that value is restricted to auto, heating, cooling,
+        heatingCooling and testMode. States such as standby, forcedNormal or
+        normalStandby only show up in their own mode feature, which is what
+        this reads. Valid modes come from `getModes()`.
+        """
+        return bool(self.getProperty(f"heating.circuits.{self.circuit}.operating.modes.{mode}")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getSummerEcoActive(self) -> bool:
+        return bool(self.getProperty(f"heating.circuits.{self.circuit}.configuration.summerEco.absolute")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getSummerEcoThreshold(self) -> float:
+        return float(self.getProperty(f"heating.circuits.{self.circuit}.configuration.summerEco.absolute")["properties"]["threshold"]["value"])

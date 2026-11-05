@@ -30,6 +30,45 @@ class Device:
     def getDeviceErrors(self) -> list[Any]:
         return list[Any](self.getProperty("device.messages.errors.raw")["properties"]["entries"]["value"])
 
+    @handleNotSupported
+    def getDeviceInfoMessages(self) -> list[Any]:
+        return list[Any](self.getProperty("device.messages.info.raw")["properties"]["entries"]["value"])
+
+    @handleNotSupported
+    def getDeviceServiceMessages(self) -> list[Any]:
+        """Pending service notices, e.g. maintenance due."""
+        return list[Any](self.getProperty("device.messages.service.raw")["properties"]["entries"]["value"])
+
+    @handleNotSupported
+    def getDeviceStatusMessages(self) -> list[Any]:
+        return list[Any](self.getProperty("device.messages.status.raw")["properties"]["entries"]["value"])
+
+    @handleNotSupported
+    def getDeviceVariant(self) -> str:
+        return str(self.getProperty("device.variant")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getDeviceBrand(self) -> str:
+        return str(self.getProperty("device.brand")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getExternalLockActive(self) -> bool:
+        """External blocking contact. Successor of the deprecated heating.external.lock."""
+        return bool(self.getProperty("device.lock.external")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getMalfunctionLockActive(self) -> bool:
+        return bool(self.getProperty("device.lock.malfunction")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getZigbeeCoordinatorActive(self) -> bool:
+        """Whether the device's own zigbee coordinator is switched on."""
+        return bool(self.getProperty("device.zigbee.active")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getZigbeeCoordinatorStatus(self) -> str:
+        return str(self.getProperty("device.zigbee.status")["properties"]["status"]["value"])
+
     def isLegacyDevice(self) -> bool:
         return hasRoles(["type:legacy"], self.roles)
 

@@ -1,6 +1,10 @@
 [tool.poetry]
 name = "PyViCare"
-version = "0.1.0"
+# Upstream ships 0.1.0 as a placeholder and sets the real version at release
+# time. The local label marks our own build and still satisfies the
+# `PyViCare==2.63.0` pin in the Home Assistant manifest, so the test instance
+# accepts it as a drop-in replacement.
+version = "2.63.0+torsten9"
 description = "Library to communicate with the Viessmann ViCare API."
 authors = [
   "Simon Gillet <mail+pyvicare@gillet.ninja>"
