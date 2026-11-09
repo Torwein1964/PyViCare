@@ -13,6 +13,7 @@ from PyViCare.PyViCareHybrid import Hybrid
 from PyViCare.PyViCareOilBoiler import OilBoiler
 from PyViCare.PyViCarePelletsBoiler import PelletsBoiler
 from PyViCare.PyViCareRadiatorActuator import RadiatorActuator
+from PyViCare.PyViCareRemoteController import RemoteController
 from PyViCare.PyViCareRepeater import Repeater
 from PyViCare.PyViCareRoomControl import RoomControl
 from PyViCare.PyViCareRoomSensor import RoomSensor
@@ -74,6 +75,9 @@ class PyViCareDeviceConfig:
     def asRoomSensor(self):
         return RoomSensor(self.accessor, self.service, self.roles)
 
+    def asRemoteController(self):
+        return RemoteController(self.accessor, self.service, self.roles)
+
     def asRoomControl(self):
         return RoomControl(self.accessor, self.service, self.roles)
 
@@ -134,6 +138,7 @@ class PyViCareDeviceConfig:
             (self.asFloorHeatingChannel, r"Smart_zigbee_fht_channel", ["type:fhtChannel"]),
             (self.asRoomControl, r"E3_RoomControl|Smart_RoomControl", ["type:virtual;smartRoomControl"]),
             (self.asRoomSensor, r"E3_RoomSensor", ["type:climateSensor"]),
+            (self.asRemoteController, r"E3_Vitotrol_300E", ["type:rcSensor"]),
             (self.asRepeater, r"E3_Repeater", ["type:repeater"]),
             (self.asWaterTreatment, r"VitosetAqua", ["type:waterTreatment"]),
             (self.asGateway, r"E3_TCU41_x04", ["type:gateway;TCU100"]),
