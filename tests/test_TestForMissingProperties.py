@@ -53,6 +53,17 @@ class TestForMissingProperties(unittest.TestCase):
             'heating.configuration.heatingRod.dhw',
             'heating.configuration.heatingRod.heating',
             'heating.heatingRod.statistics',
+            # Alternative naming conventions used as fallback for device
+            # compatibility - same rationale as the buffer sensors above. These
+            # are read by the *Legacy getters, for installations that serve only
+            # the deprecated feature and not its bufferCylinder successor.
+            'heating.buffer.hysteresis',
+            'heating.heatingRod',
+            'heating.sensors.temperature.allengra',
+            # The room window state exists under two names; older zigbee
+            # actuators serve only the deprecated one.
+            'rooms.0.configuration.window.openState',
+            'rooms.0.sensors.window.openState',
         ]
 
         all_features = self.read_all_deprecated_features()
@@ -407,6 +418,51 @@ class TestForMissingProperties(unittest.TestCase):
             'ventilation.sensors.temperature.outside',
             'ventilation.sensors.humidity.outdoor',
             'heating.compressors.0.sensors.pressure.outlet',
+            # The rooms.others.* branch and the per-room programs are read by
+            # the local room model. No test dump covers them yet - a dump from
+            # an installation with configured rooms and other rooms is needed
+            # before these can be verified.
+            'rooms.0',
+            'rooms.0.operating.state',
+            'rooms.0.operating.programs.comfort',
+            'rooms.0.operating.programs.reducedCooling',
+            'rooms.0.quickmodes.manual',
+            'rooms.0.temperature.levels.comfort.cooling',
+            'rooms.others.0.sensors.temperature',
+            'rooms.others.0.sensors.humidity',
+            'rooms.others.0.temperature.levels.heating',
+            'rooms.others.0.temperature.levels.comfort.cooling',
+            'rooms.others.0.temperature.levels.comfort.perceived',
+            'rooms.others.0.temperature.levels.normal.heating',
+            'heating.dhw.operating.modes',
+            'rooms',
+            'rooms.0.algorithm',
+            'rooms.0.configuration.window.openState',
+            'rooms.0.operating.programs.comfortCooling',
+            'rooms.0.operating.programs.comfortHeating',
+            'rooms.0.operating.programs.normalCooling',
+            'rooms.0.operating.programs.normalHeating',
+            'rooms.0.operating.programs.reducedHeating',
+            'rooms.0.quickmodes.manualTillNextSchedule',
+            'rooms.0.schedule',
+            'rooms.0.sensors.co2',
+            'rooms.0.sensors.window.openState',
+            'rooms.0.temperature.levels.cooling',
+            'rooms.0.temperature.levels.heating',
+            'rooms.features',
+            'rooms.features.remotePresenceProbability',
+            'rooms.others',
+            'rooms.others.0.algorithm',
+            'rooms.others.0.condensationRisk',
+            'rooms.others.0.operating.programs.comfort',
+            'rooms.others.0.temperature.levels.cooling',
+            'rooms.others.0.temperature.levels.normal.cooling',
+            'rooms.others.0.temperature.levels.normal.perceived',
+            'rooms.others.0.temperature.levels.reduced.cooling',
+            'rooms.others.0.temperature.levels.reduced.heating',
+            'rooms.remotePresenceProbability',
+            'rooms.status',
+            'rooms.others.0.temperature.levels.comfort.heating',
         ]
 
         all_features = self.read_all_features()

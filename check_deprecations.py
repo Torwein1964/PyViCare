@@ -39,7 +39,37 @@ IGNORED_IN_CODE = {
         "replacement heatingRods.heatGeneration.N is still missing (Vitocal 250-A, 2026-10-06)",
     "heating.heatingRod.statistics":
         "replacement heatingRods.heatGeneration.N.statistics is still missing (Vitocal 250-A, 2026-10-06)",
+    "heating.sensors.temperature.allengra":
+        "replacement heating.heatGeneration.N.secondaryCircuit.sensors.temperature is on no known device",
+    "heating.heatingRod":
+        "replacement heating.heatingRod.heating is on no known device",
+    "heating.configuration.temperature.outside.DampingFactor":
+        "replacement differs only in capitalisation and is on no known device",
+    "heating.dhw.temperature.levels":
+        "marked 'Not used anymore' without a replacement, still served by devices",
+    "heating.buffer.hysteresis":
+        "read by getBufferHysteresis*Legacy(); replacement heating.bufferCylinder.hysteresis is not read yet",
+    "heating.buffer.sensors.temperature.main":
+        "read by getBufferMainTemperatureLegacy() for firmware that serves only the old feature",
+    # `*` stands for one feature name segment, so one entry covers every room.
+    "rooms.*.sensors.window.openState":
+        "read by Room.getWindowOpenLegacy() for firmware that serves only the old pair",
+    "rooms.*.configuration.window.openState":
+        "read by Room.getOpenWindowDetectionEnabledLegacy() for the same reason",
 }
+
+
+def ignored_in_code(feature):
+    """Return the reason this feature may be read in code, or None."""
+    if feature in IGNORED_IN_CODE:
+        return IGNORED_IN_CODE[feature]
+    for pattern, reason in IGNORED_IN_CODE.items():
+        if "*" not in pattern:
+            continue
+        regex = re.escape(pattern).replace(r"\*", r"[^.]+")
+        if re.fullmatch(regex, feature):
+            return reason
+    return None
 
 
 def load_database():
@@ -248,8 +278,8 @@ def report(db):
             "is_past_due": is_past_due,
         }
 
-        if code_files and feature in IGNORED_IN_CODE:
-            entry["reason"] = IGNORED_IN_CODE[feature]
+        if code_files and (reason := ignored_in_code(feature)):
+            entry["reason"] = reason
             ignored.append(entry)
         elif code_files:
             used_in_code.append(entry)

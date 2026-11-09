@@ -602,6 +602,175 @@ class HeatPump(HeatingDevice, VentilationDevice):
     def getConfigurationDHWHeaterApproved(self) -> bool:
         return bool(self.getProperty("heating.configuration.dhwHeater")["properties"]["useApproved"]["value"])
 
+    @handleNotSupported
+    def getHeatProductionCurrentStatus(self) -> str:
+        return str(self.getProperty("heating.heat.production.current")["properties"]["status"]["value"])
+
+    # Heat production summary for heating
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingUnit(self) -> str:
+        return str(self.getProperty("heating.heat.production.summary.heating")["properties"]["currentDay"]["unit"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingCurrentDay(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.heating")["properties"]["currentDay"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingCurrentMonth(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.heating")["properties"]["currentMonth"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingCurrentYear(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.heating")["properties"]["currentYear"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingLastMonth(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.heating")["properties"]["lastMonth"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingLastSevenDays(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.heating")["properties"]["lastSevenDays"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionHeatingLastYear(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.heating")["properties"]["lastYear"]["value"])
+
+    # Heat production summary for domestic hot water
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterUnit(self) -> str:
+        return str(self.getProperty("heating.heat.production.summary.dhw")["properties"]["currentDay"]["unit"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterCurrentDay(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.dhw")["properties"]["currentDay"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterCurrentMonth(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.dhw")["properties"]["currentMonth"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterCurrentYear(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.dhw")["properties"]["currentYear"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterLastMonth(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.dhw")["properties"]["lastMonth"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterLastSevenDays(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.dhw")["properties"]["lastSevenDays"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionDomesticHotWaterLastYear(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.dhw")["properties"]["lastYear"]["value"])
+
+    # Heat production summary for cooling
+    @handleNotSupported
+    def getHeatSummaryProductionCoolingUnit(self) -> str:
+        return str(self.getProperty("heating.heat.production.summary.cooling")["properties"]["currentDay"]["unit"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionCoolingCurrentDay(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.cooling")["properties"]["currentDay"]["value"])
+
+    @handleNotSupported
+    def getHeatSummaryProductionCoolingCurrentYear(self) -> float:
+        return float(self.getProperty("heating.heat.production.summary.cooling")["properties"]["currentYear"]["value"])
+
+    @handleNotSupported
+    def getPowerConsumptionCurrentStatus(self) -> str:
+        return str(self.getProperty("heating.power.consumption.current")["properties"]["status"]["value"])
+
+    # Power consumption summary for cooling (heating and dhw already exist)
+    @handleNotSupported
+    def getPowerSummaryConsumptionCoolingUnit(self) -> str:
+        return str(self.getProperty("heating.power.consumption.summary.cooling")["properties"]["currentDay"]["unit"])
+
+    @handleNotSupported
+    def getPowerSummaryConsumptionCoolingCurrentDay(self) -> float:
+        return float(self.getProperty("heating.power.consumption.summary.cooling")["properties"]["currentDay"]["value"])
+
+    @handleNotSupported
+    def getPowerSummaryConsumptionCoolingCurrentYear(self) -> float:
+        return float(self.getProperty("heating.power.consumption.summary.cooling")["properties"]["currentYear"]["value"])
+
+    # Operating states
+    @handleNotSupported
+    def getOutdoorDefrostingActive(self) -> bool:
+        return bool(self.getProperty("heating.outdoor.defrosting")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getHeatingRodActive(self) -> bool:
+        return bool(self.getProperty("heating.heatingRod")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getSecondaryCircuitReturnTemperatureMinimum(self) -> float:
+        return float(self.getProperty("heating.secondaryCircuit.temperature.return.minimum")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getPrimaryCircuitFourThreeWayValveActive(self) -> bool:
+        return bool(self.getProperty("heating.primaryCircuit.valves.fourThreeWay")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getSecondaryCircuitFourThreeWayValveCurrent(self) -> float:
+        return float(self.getProperty("heating.secondaryCircuit.valves.fourThreeWay")["properties"]["current"]["value"])
+
+    @handleNotSupported
+    def getSecondaryCircuitFourThreeWayValveTarget(self) -> float:
+        return float(self.getProperty("heating.secondaryCircuit.valves.fourThreeWay")["properties"]["target"]["value"])
+
+    # Auxiliary heaters and the backup heat generator
+    @handleNotSupported
+    def getCondensatePanHeaterActive(self) -> bool:
+        return bool(self.getProperty("heating.heater.condensatePan")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getFanRingHeaterActive(self) -> bool:
+        return bool(self.getProperty("heating.heater.fanRing")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getSecondaryHeatGeneratorActive(self) -> bool:
+        return bool(self.getProperty("heating.secondaryHeatGenerator")["properties"]["active"]["value"])
+
+    @handleNotSupported
+    def getSecondaryHeatGeneratorConnectionType(self) -> str:
+        return str(self.getProperty("heating.secondaryHeatGenerator")["properties"]["connectionType"]["value"])
+
+    # Internal pump of the indoor unit
+    @handleNotSupported
+    def getInternalPumpStatus(self) -> str:
+        return str(self.getProperty("heating.boiler.pumps.internal")["properties"]["status"]["value"])
+
+    @handleNotSupported
+    def getInternalPumpCurrent(self) -> float:
+        return float(self.getProperty("heating.boiler.pumps.internal.current")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getInternalPumpTarget(self) -> float:
+        return float(self.getProperty("heating.boiler.pumps.internal.target")["properties"]["value"]["value"])
+
+    # Indexed components without their own component class. The parameter is
+    # named `slot` so the feature name normalizes for the test watcher.
+    @handleNotSupported
+    def getPrimaryCircuitFanCurrent(self, slot: int) -> float:
+        return float(self.getProperty(f"heating.primaryCircuit.fans.{slot}.current")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getPrimaryCircuitFanStatus(self, slot: int) -> str:
+        return str(self.getProperty(f"heating.primaryCircuit.fans.{slot}.current")["properties"]["status"]["value"])
+
+    @handleNotSupported
+    def getEconomizerLiquidTemperature(self, slot: int) -> float:
+        return float(self.getProperty(f"heating.economizers.{slot}.sensors.temperature.liquid")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getExpansionValveTarget(self, slot: int) -> float:
+        return float(self.getProperty(f"heating.sensors.valve.{slot}.expansion.target")["properties"]["value"]["value"])
+
+    @handleNotSupported
+    def getAllengraTemperature(self) -> float:
+        return float(self.getProperty("heating.sensors.temperature.allengra")["properties"]["value"]["value"])
+
     # Cooling circuits
     @property
     def coolingCircuits(self) -> list[CoolingCircuit]:
