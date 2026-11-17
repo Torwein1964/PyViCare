@@ -737,18 +737,6 @@ class HeatPump(HeatingDevice, VentilationDevice):
         return str(self.getProperty("heating.secondaryHeatGenerator")["properties"]["connectionType"]["value"])
 
     # Internal pump of the indoor unit
-    @handleNotSupported
-    def getInternalPumpStatus(self) -> str:
-        return str(self.getProperty("heating.boiler.pumps.internal")["properties"]["status"]["value"])
-
-    @handleNotSupported
-    def getInternalPumpCurrent(self) -> float:
-        return float(self.getProperty("heating.boiler.pumps.internal.current")["properties"]["value"]["value"])
-
-    @handleNotSupported
-    def getInternalPumpTarget(self) -> float:
-        return float(self.getProperty("heating.boiler.pumps.internal.target")["properties"]["value"]["value"])
-
     # Indexed components without their own component class. The parameter is
     # named `slot` so the feature name normalizes for the test watcher.
     @handleNotSupported
